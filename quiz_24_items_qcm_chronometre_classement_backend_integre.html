@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B1F3A">
+<meta name="color-scheme" content="light">
+<title>Quiz chronométré — classement automatique intégré — Microéconomie — 24 items</title>
+<style>
+:root{
+  --navy:#0B1F3A;
+  --navy-2:#17395F;
+  --gold:#D4AF37;
+  --gold-dark:#B88900;
+  --cream:#FFF8E6;
+  --white:#FFFFFF;
+  --ink:#111827;
+  --muted:#64748B;
+  --line:#D9E2EC;
+  --soft:#F3F6FA;
+  --blue-soft:#EEF5FF;
+  --green:#117A4C;
+  --green-soft:#EAF8F1;
+  --red:#B42318;
+  --red-soft:#FFF0EE;
+  --orange:#9A4B09;
+  --pink:#8A1742;
+  --shadow:0 14px 38px rgba(11,31,58,.13);
+  --radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:#F4F7FB}
+body{
+  margin:0;
+  min-width:320px;
+  min-height:100vh;
+  min-height:100dvh;
+  overflow-x:hidden;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 10% 2%,rgba(212,175,55,.20),transparent 22rem),
+    linear-gradient(160deg,#F1F6FC 0%,#FFFCF3 58%,#EDF3FA 100%);
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+button,input{font:inherit}
+button{-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible{outline:3px solid rgba(212,175,55,.48);outline-offset:2px}
+.hidden{display:none!important}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  min-height:62px;
+  padding:8px max(14px,env(safe-area-inset-left)) 8px max(14px,env(safe-area-inset-right));
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  color:#fff;
+  background:linear-gradient(115deg,var(--navy),var(--navy-2));
+  box-shadow:0 6px 20px rgba(11,31,58,.24);
+}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{
+  flex:0 0 42px;
+  width:42px;height:42px;
+  display:grid;place-items:center;
+  border-radius:12px;
+  color:var(--navy);
+  background:linear-gradient(145deg,#F4DB7F,var(--gold));
+  font-size:14px;font-weight:950;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);
+}
+.brand-copy{min-width:0}
+.brand-title{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:16px;line-height:1.1;font-weight:900}
+.brand-subtitle{margin:3px 0 0;color:rgba(255,255,255,.72);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{
+  flex:0 0 auto;
+  min-width:44px;height:44px;
+  padding:0 12px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:12px;
+  color:#fff;background:rgba(255,255,255,.10);
+  font-weight:850;
+}
+.icon-btn:active{transform:scale(.98);background:rgba(255,255,255,.18)}
+
+main{width:min(100%,1180px);margin:0 auto;padding:16px 14px calc(26px + env(safe-area-inset-bottom))}
+.screen{display:none;animation:appear .22s ease}
+.screen.active{display:block}
+@keyframes appear{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+.hero{padding:8px 2px 18px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  margin:0 0 10px;padding:7px 11px;
+  border:1px solid rgba(184,137,0,.28);
+  border-radius:999px;
+  color:#725500;background:var(--cream);
+  font-size:12px;font-weight:900;
+}
+.hero h1{margin:0;color:var(--navy);font-size:clamp(31px,9vw,52px);line-height:1.03;letter-spacing:-1.4px}
+.hero h1 strong{color:var(--gold-dark)}
+.hero p{margin:14px 0 0;color:var(--muted);font-size:16px;line-height:1.52}
+.source-note{
+  margin-top:14px;padding:12px 13px;
+  border-left:4px solid var(--gold);
+  border-radius:0 13px 13px 0;
+  color:#405064;background:rgba(255,255,255,.76);
+  font-size:13px;line-height:1.45;
+}
+
+.theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:3px 0 18px}
+.theme-card{
+  min-width:0;padding:13px;
+  border:1px solid rgba(11,31,58,.10);
+  border-radius:16px;
+  background:rgba(255,255,255,.88);
+  box-shadow:0 7px 20px rgba(11,31,58,.06);
+}
+.theme-icon{width:37px;height:37px;display:grid;place-items:center;border-radius:11px;color:var(--navy);background:var(--cream);border:1px solid rgba(212,175,55,.48);font-size:12px;font-weight:950}
+.theme-card b{display:block;margin-top:9px;color:var(--navy);font-size:13px;line-height:1.25}
+.theme-card small{display:block;margin-top:4px;color:var(--muted);font-size:11px;line-height:1.3}
+
+.panel{
+  padding:18px;
+  border:1px solid rgba(11,31,58,.10);
+  border-radius:var(--radius);
+  background:rgba(255,255,255,.96);
+  box-shadow:var(--shadow);
+}
+.panel h2,.panel h3{margin:0;color:var(--navy)}
+.panel h2{font-size:25px}.panel h3{font-size:20px}
+.panel-intro{margin:7px 0 16px;color:var(--muted);font-size:14px;line-height:1.45}
+.student-fields{display:grid;gap:10px;margin-bottom:13px}
+.field label{display:block;margin-bottom:5px;color:var(--navy);font-size:12px;font-weight:850}
+.field input{width:100%;height:48px;padding:0 13px;border:1.5px solid var(--line);border-radius:12px;color:var(--ink);background:#fff}
+.mode-list{display:grid;gap:10px}
+.mode-btn{
+  width:100%;min-height:78px;padding:12px;
+  display:grid;grid-template-columns:46px minmax(0,1fr) 24px;align-items:center;gap:11px;
+  text-align:left;border:1.5px solid var(--line);border-radius:16px;color:var(--ink);background:#fff;
+}
+.mode-btn:active{transform:scale(.992);border-color:var(--gold-dark);background:#FFFCF4}
+.mode-icon{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;color:var(--navy);background:var(--cream);font-size:20px;font-weight:900}
+.mode-copy b{display:block;color:var(--navy);font-size:16px}.mode-copy small{display:block;margin-top:3px;color:var(--muted);font-size:12px;line-height:1.32}
+.mode-arrow{color:var(--gold-dark);font-size:24px;font-weight:950}
+.resume-box{display:none;margin-top:13px;padding-top:13px;border-top:1px solid var(--line);gap:9px}
+.resume-box.show{display:grid}
+.resume-box p{margin:0;color:var(--muted);font-size:13px;line-height:1.4}
+
+.quiz-top{
+  position:sticky;top:62px;z-index:30;
+  margin:-16px -14px 12px;padding:11px 14px 10px;
+  background:rgba(244,247,251,.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(11,31,58,.08);
+}
+.quiz-meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.meta-left{display:flex;align-items:center;gap:7px;min-width:0}
+.pill{max-width:100%;padding:6px 9px;border-radius:999px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;font-weight:900}
+.theme-pill{color:var(--navy);background:var(--blue-soft);border:1px solid #C8D9EF}
+.level-easy{color:#09613E;background:#E9F8F0;border:1px solid #B8E4CC}
+.level-medium{color:#795000;background:#FFF5D8;border:1px solid #EFD78C}
+.level-hard{color:#94360F;background:#FFF0E8;border:1px solid #F0BFA8}
+.level-very-hard{color:#881537;background:#FFEAF1;border:1px solid #EDB5C7}
+.counter{flex:0 0 auto;color:var(--muted);font-size:12px;font-weight:850}
+.progress-track{height:9px;margin-top:9px;border-radius:999px;background:#DFE7F0;overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--gold-dark),var(--gold));transition:width .25s ease}
+
+.question-card{
+  padding:17px;
+  border:1px solid rgba(11,31,58,.10);
+  border-radius:var(--radius);
+  background:rgba(255,255,255,.97);
+  box-shadow:var(--shadow);
+}
+.source-ref{display:flex;align-items:center;gap:7px;margin-bottom:10px;color:var(--muted);font-size:11px;font-weight:800}
+.source-ref:before{content:"SOURCE";padding:4px 7px;border-radius:7px;color:#725500;background:var(--cream);font-size:9px;letter-spacing:.6px;font-weight:950}
+.objective-ref{
+  display:flex;align-items:flex-start;gap:7px;margin:-2px 0 11px;
+  color:#30445D;font-size:12px;line-height:1.35;font-weight:800;
+}
+.objective-ref:before{
+  content:"OBJECTIF";flex:0 0 auto;padding:4px 7px;border-radius:7px;
+  color:var(--navy);background:var(--blue-soft);border:1px solid #C8D9EF;
+  font-size:9px;letter-spacing:.45px;font-weight:950;
+}
+.single-answer-note{margin:7px 0 0;color:var(--muted);font-size:11px;font-weight:750}
+.explanation-grid{display:grid;gap:8px;margin-top:10px}
+.explanation-row{padding:10px 11px;border-radius:11px;background:rgba(255,255,255,.58);border:1px solid rgba(11,31,58,.08)}
+.explanation-label{display:block;margin-bottom:3px;color:var(--navy);font-size:10px;letter-spacing:.45px;text-transform:uppercase;font-weight:950}
+.feedback.good .explanation-label{color:#075D39}
+.feedback.bad .explanation-label{color:#8E1E14}
+.review-skill{margin-top:6px;color:#30445D;font-size:12px;font-weight:800}
+.justification .explanation-grid{margin-top:0}
+.question-text{margin:0;color:var(--navy);font-size:21px;line-height:1.32;letter-spacing:-.2px}
+.options{display:grid;gap:10px;margin-top:16px}
+.option{
+  width:100%;min-height:62px;padding:11px 12px;
+  display:grid;grid-template-columns:40px minmax(0,1fr);align-items:center;gap:11px;
+  text-align:left;border:2px solid var(--line);border-radius:15px;color:var(--ink);background:#fff;
+  transition:border-color .14s,background .14s,transform .14s;
+}
+.option:active:not(:disabled){transform:scale(.993)}
+.option.selected{border-color:var(--gold-dark);background:#FFFAED;box-shadow:0 0 0 3px rgba(212,175,55,.13)}
+.option.correct{border-color:var(--green);background:var(--green-soft)}
+.option.wrong{border-color:var(--red);background:var(--red-soft)}
+.option:disabled{opacity:1;cursor:default}
+.letter{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;color:var(--navy);background:#EDF2F8;font-size:16px;font-weight:950}
+.selected .letter{background:var(--gold)}
+.correct .letter{color:#fff;background:var(--green)}
+.wrong .letter{color:#fff;background:var(--red)}
+.option-copy{min-width:0;font-size:15px;line-height:1.38;font-weight:670;overflow-wrap:anywhere}
+.feedback{display:none;margin-top:14px;padding:13px;border-radius:14px;font-size:14px;line-height:1.48;scroll-margin-bottom:96px}
+.feedback.show{display:block}
+.feedback.good{color:#075D39;background:var(--green-soft);border:1px solid #B6E2CB}
+.feedback.bad{color:#8E1E14;background:var(--red-soft);border:1px solid #F1C0BA}
+.feedback.neutral{color:var(--navy);background:var(--blue-soft);border:1px solid #C8D9EF}
+.feedback strong{font-weight:950}
+
+.quiz-actions{
+  position:sticky;bottom:0;z-index:35;
+  margin:12px -14px calc(-26px - env(safe-area-inset-bottom));
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+  display:grid;grid-template-columns:48px minmax(0,1fr);gap:9px;
+  background:rgba(255,255,255,.96);
+  border-top:1px solid rgba(11,31,58,.10);
+  box-shadow:0 -8px 24px rgba(11,31,58,.10);
+  backdrop-filter:blur(12px);
+}
+.btn{
+  min-width:0;min-height:50px;padding:10px 15px;
+  border:0;border-radius:14px;
+  font-weight:900;
+}
+.btn:disabled{opacity:.42;cursor:not-allowed}
+.btn-primary{color:var(--navy);background:linear-gradient(145deg,#F2D879,var(--gold));box-shadow:0 7px 16px rgba(184,137,0,.18)}
+.btn-dark{color:#fff;background:var(--navy)}
+.btn-ghost{color:var(--navy);background:#EDF2F8;border:1px solid #D5DEEA}
+.btn-danger{color:var(--red);background:var(--red-soft);border:1px solid #F1C0BA}
+.btn-block{width:100%}
+
+.page-head{margin:2px 2px 14px}
+.page-head h1{margin:0;color:var(--navy);font-size:30px;line-height:1.08;letter-spacing:-.7px}
+.page-head p{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.4}
+.summary-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:13px}
+.score-card,.review-card{min-width:0;width:100%;padding:17px;border:1px solid rgba(11,31,58,.10);border-radius:var(--radius);background:rgba(255,255,255,.97);box-shadow:var(--shadow)}
+.student-summary{margin-bottom:13px;padding:10px 12px;border-radius:12px;color:var(--navy);background:var(--soft);font-size:13px;font-weight:800}
+.score-row{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.score-main strong{display:block;color:var(--navy);font-size:44px;line-height:1}.score-main span{display:block;margin-top:5px;color:var(--gold-dark);font-size:17px;font-weight:950}
+.score-badge{width:86px;height:86px;display:grid;place-items:center;border-radius:50%;color:var(--navy);background:var(--cream);border:7px solid var(--gold);font-size:17px;font-weight:950}
+.mastery{margin-top:13px;padding:12px;border-radius:13px;color:var(--navy);background:var(--blue-soft);font-size:13px;line-height:1.45;font-weight:700}
+.theme-scores{display:grid;gap:8px;margin-top:13px}
+.theme-score{display:flex;justify-content:space-between;gap:12px;padding:10px 11px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:13px}
+.theme-score span{min-width:0;color:var(--navy);font-weight:750;overflow-wrap:anywhere}.theme-score b{color:var(--gold-dark)}
+.stack-actions{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;margin-top:13px}
+.filters{display:flex;gap:7px;overflow-x:auto;padding:1px 0 8px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filter-btn{flex:0 0 auto;min-height:39px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--navy);background:#fff;font-size:12px;font-weight:850}
+.filter-btn.active{color:#fff;background:var(--navy);border-color:var(--navy)}
+.review-list{display:grid;gap:11px}
+.review-item{padding:14px;border:1px solid var(--line);border-left:5px solid var(--green);border-radius:15px;background:#fff}
+.review-item.bad{border-left-color:var(--red)}
+.review-item h3{margin:0;color:var(--navy);font-size:16px;line-height:1.38}
+.review-meta{margin-top:7px;color:var(--muted);font-size:11px;font-weight:800}
+.review-answer{margin:11px 0 0;font-size:13px;line-height:1.45}
+.justification{margin-top:10px;padding:11px;border-radius:12px;color:#30445D;background:var(--soft);font-size:13px;line-height:1.5}
+.empty{padding:18px;text-align:center;color:var(--muted);font-size:13px}
+
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));z-index:100;max-width:calc(100vw - 28px);padding:10px 14px;border-radius:999px;color:#fff;background:var(--navy);box-shadow:0 10px 26px rgba(11,31,58,.25);font-size:13px;font-weight:800;opacity:0;pointer-events:none;transform:translate(-50%,18px);transition:.2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+sup{font-size:.72em;line-height:0}sub{font-size:.72em;line-height:0}
+
+
+.quiz-status{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex:0 0 auto}
+.timer-display{
+  min-width:72px;padding:6px 9px;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border:1px solid rgba(184,137,0,.32);border-radius:999px;color:#664B00;background:var(--cream);
+  font-variant-numeric:tabular-nums;font-size:12px;font-weight:950;letter-spacing:.25px;
+}
+.timer-display:before{content:"◷";font-size:14px;line-height:1}
+.timer-display.finished{color:#075D39;background:var(--green-soft);border-color:#B6E2CB}
+.ranking-note{
+  margin:12px 0 0;padding:11px 12px;border-radius:12px;color:#30445D;background:var(--blue-soft);
+  border:1px solid #C8D9EF;font-size:12px;line-height:1.45;font-weight:750;
+}
+.privacy-note{margin:10px 0 0;color:var(--muted);font-size:11px;line-height:1.4}
+.result-metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
+.metric-card{padding:11px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.metric-card span{display:block;color:var(--muted);font-size:10px;letter-spacing:.45px;text-transform:uppercase;font-weight:950}
+.metric-card strong{display:block;margin-top:5px;color:var(--navy);font-size:20px;font-variant-numeric:tabular-nums}
+.submission-status{margin-top:10px;padding:10px 11px;border-radius:12px;color:#30445D;background:var(--soft);font-size:12px;line-height:1.42;font-weight:750}
+.submission-status.success{color:#075D39;background:var(--green-soft);border:1px solid #B6E2CB}
+.submission-status.warning{color:#795000;background:#FFF5D8;border:1px solid #EFD78C}
+.submission-status.error{color:#8E1E14;background:var(--red-soft);border:1px solid #F1C0BA}
+.leaderboard-toolbar{display:grid;gap:9px;margin:0 0 13px}
+.leaderboard-toolbar .field input{height:46px}
+.leaderboard-list{display:grid;gap:9px}
+.leaderboard-row{
+  min-width:0;padding:11px;display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;
+  border:1px solid var(--line);border-radius:14px;background:#fff;
+}
+.leaderboard-row.current{border:2px solid var(--gold-dark);background:#FFFAED}
+.leaderboard-rank{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;color:var(--navy);background:var(--cream);font-size:15px;font-weight:950}
+.leaderboard-student{min-width:0}
+.leaderboard-student b{display:block;color:var(--navy);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.leaderboard-student small{display:block;margin-top:3px;color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.leaderboard-result{text-align:right;white-space:nowrap}
+.leaderboard-result b{display:block;color:var(--gold-dark);font-size:14px}
+.leaderboard-result time{display:block;margin-top:3px;color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums;font-weight:850}
+.leaderboard-source{margin:0 0 11px;padding:10px 11px;border-radius:12px;color:#30445D;background:var(--soft);font-size:12px;line-height:1.42}
+.leaderboard-source strong{color:var(--navy)}
+.config-alert{margin-top:10px;padding:11px;border-left:4px solid var(--gold-dark);border-radius:0 12px 12px 0;color:#5B4709;background:var(--cream);font-size:12px;line-height:1.45}
+
+@media (max-width:379px){
+  main{padding-left:10px;padding-right:10px}
+  .quiz-top{margin-left:-10px;margin-right:-10px;padding-left:10px;padding-right:10px}
+  .question-card{padding:14px;border-radius:17px}
+  .question-text{font-size:19px}
+  .option{grid-template-columns:36px minmax(0,1fr);gap:9px;padding:10px;min-height:58px}
+  .letter{width:34px;height:34px;font-size:15px}
+  .option-copy{font-size:14px}
+  .quiz-actions{margin-left:-10px;margin-right:-10px;padding-left:10px;padding-right:10px}
+}
+
+@media (min-width:680px){
+  main{padding:24px 24px 40px}
+  .topbar{padding-left:24px;padding-right:24px}
+  .brand-title{font-size:18px}.brand-subtitle{font-size:12px}
+  .home-layout{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:24px;align-items:start}
+  .theme-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .student-fields{grid-template-columns:1fr .55fr}
+  .quiz-top{top:62px;margin:-24px -24px 15px;padding:13px 24px 11px}
+  .question-card{padding:25px}.question-text{font-size:27px}
+  .options{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .option{min-height:82px;padding:14px}.option-copy{font-size:17px}
+  .quiz-actions{position:static;margin:14px 0 0;padding:0;grid-template-columns:130px minmax(220px,330px);justify-content:space-between;background:transparent;border:0;box-shadow:none;backdrop-filter:none}
+  .summary-grid{grid-template-columns:330px minmax(0,1fr);align-items:start}
+  .stack-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (min-width:980px){
+  main{padding-left:34px;padding-right:34px}
+  .question-card{padding:30px}.question-text{font-size:31px}
+  .option-copy{font-size:18px}
+}
+@media (max-width:370px){
+  .brand-subtitle{display:none}
+  .brand-title{font-size:14px}
+  .icon-btn{padding:0 9px;min-width:42px}
+  .hero h1{font-size:29px}
+  .theme-grid{grid-template-columns:1fr 1fr}
+  .question-card{padding:14px}
+  .question-text{font-size:19px}
+  .option{grid-template-columns:36px minmax(0,1fr);padding:10px;gap:9px}
+  .letter{width:34px;height:34px}
+}
+@media print{
+  .topbar,.quiz-actions,.filters,.stack-actions,.icon-btn{display:none!important}
+  body{background:#fff}.screen{display:none!important}.screen.active{display:block!important}
+  main{width:100%;max-width:none;padding:0}.review-card,.score-card,.panel{box-shadow:none;border-color:#bbb}
+  .review-item{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">QCM</div>
+    <div class="brand-copy">
+      <p class="brand-title">Quiz microéconomie</p>
+      <p class="brand-subtitle">24 items · chronomètre · classement</p>
+    </div>
+  </div>
+  <button id="homeBtn" class="icon-btn" type="button" aria-label="Retour à l’accueil">Accueil</button>
+</header>
+
+<main>
+  <section id="homeScreen" class="screen active">
+    <div class="home-layout">
+      <div>
+        <div class="hero">
+          <div class="eyebrow">✓ 24 items sélectionnés et renforcés à partir des QCM de la source</div>
+          <h1>Quiz progressif de <strong>microéconomie</strong></h1>
+          <p>Quatre thèmes, six items par thème et une progression réelle : repérage, compréhension, application puis raisonnement.</p>
+          <div class="source-note"><strong>Base documentaire :</strong> chaque item reprend une situation, des données ou une notion présente dans les QCM de la source. Les formulations ont été raccourcies pour le mobile et les distracteurs qui se chevauchaient ont été rendus mutuellement exclusifs afin de garantir une seule bonne réponse, sans ajouter de notion extérieure.</div>
+        </div>
+        <div class="theme-grid" aria-label="Thèmes du quiz">
+          <article class="theme-card"><div class="theme-icon">UT/Um</div><b>Utilité totale et marginale</b><small>2 faciles · 2 moyens · 1 difficile · 1 très difficile</small></article>
+          <article class="theme-card"><div class="theme-icon">CI</div><b>Courbe d’indifférence</b><small>Préférences, propriétés et comparaison des paniers</small></article>
+          <article class="theme-card"><div class="theme-icon">TMS</div><b>Taux marginal de substitution</b><small>Interprétation, calcul et maintien de l’utilité</small></article>
+          <article class="theme-card"><div class="theme-icon">DB</div><b>Contrainte budgétaire</b><small>Accessibilité, équation et déplacements de la droite</small></article>
+        </div>
+      </div>
+
+      <aside class="panel" aria-labelledby="startTitle">
+        <h2 id="startTitle">Commencer</h2>
+        <p class="panel-intro">Choisissez le mode. Le chronomètre démarre au lancement du quiz et continue même après un rechargement de la page.</p>
+        <div class="student-fields">
+          <div class="field"><label for="studentName">Nom et prénom — obligatoire pour le classement</label><input id="studentName" autocomplete="name" placeholder="Nom de l’élève" maxlength="80"></div>
+          <div class="field"><label for="studentClass">Classe — obligatoire pour le classement</label><input id="studentClass" placeholder="4e EG" maxlength="40"></div>
+        </div>
+        <div class="mode-list">
+          <button id="trainingBtn" class="mode-btn" type="button">
+            <span class="mode-icon">✓</span><span class="mode-copy"><b>Mode entraînement</b><small>Correction et justification après chaque item.</small></span><span class="mode-arrow">›</span>
+          </button>
+          <button id="examBtn" class="mode-btn" type="button">
+            <span class="mode-icon">24</span><span class="mode-copy"><b>Mode évaluation</b><small>Les réponses sont corrigées seulement à la fin.</small></span><span class="mode-arrow">›</span>
+          </button>
+          <button id="answerKeyBtn" class="mode-btn" type="button">
+            <span class="mode-icon">i</span><span class="mode-copy"><b>Corrigé intégral</b><small>Consulter les 24 réponses avec leurs justifications.</small></span><span class="mode-arrow">›</span>
+          </button>
+          <button id="leaderboardBtn" class="mode-btn" type="button">
+            <span class="mode-icon">#</span><span class="mode-copy"><b>Classement des élèves</b><small>Score décroissant, puis durée croissante en cas d’égalité.</small></span><span class="mode-arrow">›</span>
+          </button>
+        </div>
+        <div class="ranking-note"><strong>Règle du classement :</strong> une bonne réponse supplémentaire reste toujours prioritaire. Le temps sert uniquement à départager les élèves ayant le même nombre de bonnes réponses.</div>
+        <p class="privacy-note">Seuls les résultats du mode évaluation sont ajoutés au classement. Le mode entraînement reste libre et non classé.</p>
+        <div id="resumeBox" class="resume-box">
+          <p id="resumeText"></p>
+          <button id="resumeBtn" class="btn btn-dark btn-block" type="button">Reprendre</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="quizScreen" class="screen" aria-label="Quiz">
+    <div class="quiz-top">
+      <div class="quiz-meta">
+        <div class="meta-left">
+          <span id="themePill" class="pill theme-pill"></span>
+          <span id="levelPill" class="pill"></span>
+        </div>
+        <div class="quiz-status"><span id="timerDisplay" class="timer-display" aria-label="Temps écoulé">00:00</span><span id="counter" class="counter" aria-live="polite"></span></div>
+      </div>
+      <div class="progress-track" aria-hidden="true"><div id="progressFill" class="progress-fill"></div></div>
+    </div>
+
+    <article class="question-card">
+      <div id="sourceRef" class="source-ref"></div>
+      <div id="skillRef" class="objective-ref"></div>
+      <h2 id="questionText" class="question-text"></h2>
+      <p class="single-answer-note">Une seule réponse est correcte.</p>
+      <div id="options" class="options" role="radiogroup" aria-label="Propositions de réponse"></div>
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+    </article>
+
+    <div class="quiz-actions">
+      <button id="prevBtn" class="btn btn-ghost" type="button" aria-label="Question précédente">←</button>
+      <button id="validateBtn" class="btn btn-primary" type="button">Valider la réponse</button>
+      <button id="nextBtn" class="btn btn-dark hidden" type="button">Question suivante →</button>
+    </div>
+  </section>
+
+  <section id="summaryScreen" class="screen">
+    <header class="page-head"><h1>Résultat</h1><p id="summarySub"></p></header>
+    <div class="summary-grid">
+      <aside class="score-card">
+        <div id="studentSummary" class="student-summary"></div>
+        <div class="score-row">
+          <div class="score-main"><strong id="scoreValue">0/24</strong><span id="scorePercent">0 %</span></div>
+          <div id="scoreBadge" class="score-badge">0%</div>
+        </div>
+        <div class="result-metrics">
+          <div class="metric-card"><span>Durée</span><strong id="durationSummary">00:00</strong></div>
+          <div class="metric-card"><span>Rang</span><strong id="rankSummary">—</strong></div>
+        </div>
+        <div id="submissionStatus" class="submission-status"></div>
+        <div id="mastery" class="mastery"></div>
+        <div id="themeScores" class="theme-scores"></div>
+        <div class="stack-actions">
+          <button id="restartBtn" class="btn btn-primary" type="button">Recommencer</button>
+          <button id="errorsBtn" class="btn btn-ghost" type="button">Afficher les erreurs</button>
+          <button id="leaderboardFromSummaryBtn" class="btn btn-dark" type="button">Voir le classement</button>
+        </div>
+      </aside>
+      <section class="review-card">
+        <h2>Correction détaillée</h2>
+        <p class="panel-intro">Filtrez la correction par thème.</p>
+        <div id="summaryFilters" class="filters"></div>
+        <div id="summaryReview" class="review-list"></div>
+      </section>
+    </div>
+  </section>
+
+
+  <section id="leaderboardScreen" class="screen">
+    <header class="page-head"><h1>Classement des élèves</h1><p>Le nombre de bonnes réponses est prioritaire. À score égal, l’élève le plus rapide est classé devant.</p></header>
+    <section class="review-card">
+      <div class="leaderboard-toolbar">
+        <div class="field"><label for="leaderboardClass">Filtrer par classe — laisser vide pour toutes</label><input id="leaderboardClass" placeholder="Ex. 4e EG1" maxlength="40"></div>
+        <button id="refreshLeaderboardBtn" class="btn btn-primary btn-block" type="button">Actualiser le classement</button>
+      </div>
+      <div id="leaderboardSource" class="leaderboard-source"></div>
+      <div id="leaderboardList" class="leaderboard-list"></div>
+      <div id="endpointAlert" class="config-alert hidden"></div>
+    </section>
+  </section>
+
+  <section id="correctionScreen" class="screen">
+    <header class="page-head"><h1>Corrigé intégral</h1><p>Les 24 items améliorés à partir des QCM de la source, avec règle, application et piège à éviter.</p></header>
+    <section class="review-card">
+      <div id="keyFilters" class="filters"></div>
+      <div id="keyReview" class="review-list"></div>
+      <div class="stack-actions"><button id="startFromKeyBtn" class="btn btn-primary btn-block" type="button">Commencer le quiz</button></div>
+    </section>
+  </section>
+</main>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+const STORAGE_KEY='neoschool-micro-qcm-source-mobile-v4-timed-ranking';
+const LETTERS=['A','B','C','D'];
+const THEME_ORDER=['utility','indifference','tms','budget'];
+const THEMES={
+  utility:{short:'UT/Um',name:'Utilité totale et marginale'},
+  indifference:{short:'CI',name:'Courbe d’indifférence'},
+  tms:{short:'TMS',name:'Taux marginal de substitution'},
+  budget:{short:'DB',name:'Contrainte budgétaire'}
+};
+const LEVEL_CLASS={
+  'Facile':'level-easy',
+  'Moyen':'level-medium',
+  'Difficile':'level-hard',
+  'Très difficile':'level-very-hard'
+};
+
+const QUESTIONS=[
+  {
+    number:1,theme:'utility',difficulty:'Facile',source:'Série N°1 — QCM Q1',
+    skill:'Identifier la définition de l’utilité totale.',
+    prompt:'L’utilité totale d’un bien correspond à :',
+    options:[
+      'La satisfaction supplémentaire procurée par une quantité consommée du bien.',
+      'La satisfaction supplémentaire procurée par la dernière unité consommée.',
+      'La différence entre deux utilités marginales.',
+      'La somme des utilités marginales des unités consommées.'
+    ],
+    answer:3,
+    rule:'L’utilité totale mesure la satisfaction totale procurée par l’ensemble des unités consommées.',
+    application:'Dans une consommation discrète, cette satisfaction totale est obtenue en additionnant les utilités marginales successives.',
+    trap:'Ne pas confondre l’utilité totale avec la satisfaction apportée par la seule dernière unité.'
+  },
+  {
+    number:2,theme:'utility',difficulty:'Facile',source:'Série N°1 — QCM Q2',
+    skill:'Identifier la définition de l’utilité marginale.',
+    prompt:'L’utilité marginale correspond à :',
+    options:[
+      'La satisfaction obtenue grâce à toute la quantité consommée.',
+      'Le rapport entre la variation de la quantité consommée et l’utilité totale.',
+      'La satisfaction supplémentaire procurée par une unité supplémentaire consommée.',
+      'La différence entre l’utilité totale de la dernière unité et celle de la première unité.'
+    ],
+    answer:2,
+    rule:'L’utilité marginale mesure la variation de l’utilité totale provoquée par une unité supplémentaire.',
+    application:'Elle ne mesure ni la satisfaction totale, ni une comparaison entre la première et la dernière unité.',
+    trap:'Le mot « marginale » renvoie à l’unité supplémentaire, pas à la quantité totale.'
+  },
+  {
+    number:3,theme:'utility',difficulty:'Moyen',source:'Série N°1 — QCM Q5 — formulation précisée',
+    skill:'Relier la décroissance de l’Um au rythme d’évolution de l’UT.',
+    prompt:'Avant le point de saturation, lorsque la consommation augmente :',
+    options:[
+      'L’utilité totale augmente de plus en plus rapidement.',
+      'L’utilité totale augmente de moins en moins rapidement.',
+      'L’utilité marginale augmente de plus en plus rapidement.',
+      'L’utilité marginale reste constante.'
+    ],
+    answer:1,
+    rule:'Tant que Um > 0, l’UT augmente. Lorsque l’Um diminue, chaque nouvelle unité ajoute moins de satisfaction que la précédente.',
+    application:'L’UT reste croissante avant la saturation, mais sa hausse ralentit progressivement.',
+    trap:'Une Um décroissante ne signifie pas immédiatement que l’UT diminue : l’UT augmente encore tant que Um reste positive.'
+  },
+  {
+    number:4,theme:'utility',difficulty:'Moyen',source:'Série N°1 — QCM Q11',
+    skill:'Repérer le point de saturation à partir des valeurs de l’UT.',
+    prompt:'Si UT4 = 18, UT5 = 20 et UT6 = 20, quelle unité représente le point de saturation ?',
+    options:[
+      'La 5e unité.',
+      'La 6e unité.',
+      'La 7e unité.',
+      'La 4e unité.'
+    ],
+    answer:1,
+    rule:'Le point de saturation est atteint lorsque l’utilité marginale devient nulle et que l’UT atteint son maximum.',
+    application:'Um6 = UT6 − UT5 = 20 − 20 = 0. La 6e unité n’ajoute donc aucune satisfaction supplémentaire.',
+    trap:'Le maximum de l’UT est repéré au moment où deux valeurs successives de l’UT deviennent égales.'
+  },
+  {
+    number:5,theme:'utility',difficulty:'Difficile',source:'Série N°1 — QCM Q7 — distracteurs rendus exclusifs',
+    skill:'Déduire une utilité marginale future à partir de deux UT successives.',
+    prompt:'Si UT5 = 10, UT6 = 16 et si l’utilité marginale continue de diminuer, alors :',
+    options:[
+      'Um7 = 6.',
+      'Um7 > 6.',
+      'Um7 < 6.',
+      'Um7 = 0 nécessairement.'
+    ],
+    answer:2,
+    rule:'Pour une unité donnée, Umn = UTn − UT(n−1). Dans la phase de décroissance, les Um successives deviennent plus faibles.',
+    application:'Um6 = 16 − 10 = 6. Si l’Um continue de diminuer, alors Um7 doit être inférieure à 6.',
+    trap:'Rien ne permet d’affirmer que Um7 est déjà nulle : cela ne serait certain qu’au point de saturation.'
+  },
+  {
+    number:6,theme:'utility',difficulty:'Très difficile',source:'Série N°1 — QCM Q8 — réponses rendues mutuellement exclusives',
+    skill:'Encadrer une utilité totale située juste avant la saturation.',
+    prompt:'Si UT5 = 12, UT6 = 17 et si la 8e unité est le point de saturation, dans quel intervalle se situe UT7 ?',
+    options:[
+      'UT7 = 17.',
+      'UT7 ≥ 22.',
+      '17 < UT7 < 22.',
+      'UT7 < 17.'
+    ],
+    answer:2,
+    rule:'Avant la saturation, l’Um reste positive mais décroissante. Au point de saturation, elle devient nulle.',
+    application:'Um6 = 17 − 12 = 5. Comme Um8 = 0 et que l’Um décroît, on a 0 < Um7 < 5. Donc UT7 = 17 + Um7, d’où 17 < UT7 < 22.',
+    trap:'Dire seulement que UT7 > 17 ne donne pas l’encadrement complet demandé.'
+  },
+
+  {
+    number:7,theme:'indifference',difficulty:'Facile',source:'Série N°2 — QCM Q6',
+    skill:'Reconnaître l’allure d’une courbe d’indifférence.',
+    prompt:'La courbe d’indifférence est :',
+    options:[
+      'Toujours croissante.',
+      'Croissante puis décroissante.',
+      'Décroissante puis croissante.',
+      'Décroissante.'
+    ],
+    answer:3,
+    rule:'Sur une même courbe d’indifférence, le niveau de satisfaction reste constant.',
+    application:'Pour augmenter X tout en gardant la même utilité, le consommateur doit renoncer à une partie de Y : la courbe est décroissante.',
+    trap:'Une courbe d’indifférence ne représente pas une hausse simultanée des deux biens à utilité constante.'
+  },
+  {
+    number:8,theme:'indifference',difficulty:'Facile',source:'Série N°2 — QCM Q7',
+    skill:'Justifier pourquoi deux courbes d’indifférence ne se coupent pas.',
+    prompt:'Les courbes d’indifférence :',
+    options:[
+      'Peuvent se couper.',
+      'Se coupent toujours.',
+      'Ne se coupent jamais.',
+      'Représentent le même niveau de satisfaction lorsqu’elles se coupent.'
+    ],
+    answer:2,
+    rule:'Chaque courbe d’indifférence représente un niveau d’utilité déterminé.',
+    application:'Si deux courbes se coupaient, le panier d’intersection procurerait simultanément deux niveaux d’utilité différents, ce qui est impossible.',
+    trap:'Deux courbes différentes appartiennent à la même carte d’indifférence, mais elles ne représentent pas la même utilité.'
+  },
+  {
+    number:9,theme:'indifference',difficulty:'Moyen',source:'Série N°2 — QCM Q1',
+    skill:'Comparer les niveaux de satisfaction d’une carte d’indifférence.',
+    prompt:'Dans une carte d’indifférence, le consommateur préfère se placer sur :',
+    options:[
+      'Le panier le plus éloigné de l’origine sur une même courbe d’indifférence.',
+      'Le milieu d’une courbe d’indifférence afin de consommer autant de X que de Y.',
+      'La courbe d’indifférence la plus éloignée de l’origine.',
+      'La courbe d’indifférence la plus proche de l’origine.'
+    ],
+    answer:2,
+    rule:'Tous les paniers situés sur une même CI procurent la même satisfaction.',
+    application:'Une CI plus éloignée de l’origine représente davantage de biens et un niveau de satisfaction supérieur.',
+    trap:'Sur une même CI, aucun panier n’est préféré à un autre : ils sont équivalents.'
+  },
+  {
+    number:10,theme:'indifference',difficulty:'Moyen',source:'Série N°2 — QCM Q5',
+    skill:'Utiliser la dominance pour situer un panier par rapport à une CI.',
+    prompt:'Les paniers N (8 ; 4), M (2 ; 10) et O (4 ; 8) appartiennent à la même courbe CI1. Le panier P (5 ; 8) :',
+    options:[
+      'Appartient à CI1.',
+      'Appartient à une courbe d’indifférence plus éloignée de l’origine que CI1.',
+      'Appartient à une courbe d’indifférence plus proche de l’origine que CI1.',
+      'Appartient à une courbe d’indifférence qui coupe CI1.'
+    ],
+    answer:1,
+    rule:'Un panier qui contient au moins autant de chaque bien et davantage d’un bien est préféré au panier dominé.',
+    application:'P (5 ; 8) contient la même quantité de Y que O (4 ; 8), mais une unité supplémentaire de X. P procure donc plus d’utilité que O, qui appartient à CI1.',
+    trap:'Une nouvelle courbe d’indifférence ne peut pas couper CI1.'
+  },
+  {
+    number:11,theme:'indifference',difficulty:'Difficile',source:'Devoir de contrôle 2024/2025 — QCM Item 4',
+    skill:'Déduire la position d’une nouvelle CI à partir d’une relation d’équivalence.',
+    prompt:'Les paniers G (8 ; 5) et H (10 ; 3) procurent le même niveau de satisfaction. Le panier I (11 ; 4) appartient à :',
+    options:[
+      'La même courbe d’indifférence que G.',
+      'Une courbe d’indifférence plus éloignée de l’origine que celle de G.',
+      'Une courbe d’indifférence plus proche de l’origine que celle de G.',
+      'Une courbe plus éloignée que celle de G mais plus proche que celle de H.'
+    ],
+    answer:1,
+    rule:'Si deux paniers sont équivalents, ils appartiennent à la même CI. Un panier qui domine l’un d’eux procure une utilité supérieure à cette CI.',
+    application:'I (11 ; 4) contient plus de X et plus de Y que H (10 ; 3). I domine donc H. Or H est équivalent à G : I se situe sur une CI plus éloignée que celle de G et H.',
+    trap:'Puisque G et H sont équivalents, leurs courbes ne peuvent pas être classées différemment.'
+  },
+  {
+    number:12,theme:'indifference',difficulty:'Très difficile',source:'Série N°2 — QCM Q3',
+    skill:'Comparer deux paniers à l’aide d’une fonction d’utilité.',
+    prompt:'Soit U(X,Y) = 5 × 2^(2/3) × X^(2/3) × Y^(1/3), avec A (4 ; 32) et B (8 ; 8). Quelle proposition est correcte ?',
+    options:[
+      'A appartient à une CI plus éloignée de l’origine que celle de B.',
+      'B appartient à une CI plus éloignée de l’origine que celle de A.',
+      'A et B appartiennent à la même courbe d’indifférence.',
+      'A est préféré à B parce qu’il contient davantage de Y.'
+    ],
+    answer:2,
+    rule:'Deux paniers appartiennent à la même CI lorsqu’ils procurent la même valeur d’utilité.',
+    application:'Le facteur constant est identique. En élevant la partie variable au cube, il suffit de comparer X²Y : A donne 4² × 32 = 512 et B donne 8² × 8 = 512.',
+    trap:'Comparer seulement X ou seulement Y ne suffit pas : il faut tenir compte de la fonction d’utilité complète.'
+  },
+
+  {
+    number:13,theme:'tms',difficulty:'Facile',source:'Série N°2 — QCM Q15',
+    skill:'Reconnaître l’évolution du TMSx/y le long d’une CI.',
+    prompt:'Le TMSx/y est :',
+    options:[
+      'Décroissant en fonction de la quantité du bien X.',
+      'Constant tout au long de la courbe d’indifférence.',
+      'Croissant en fonction de la quantité du bien X.',
+      'Décroissant en fonction de la quantité du bien Y.'
+    ],
+    answer:0,
+    rule:'Le TMSx/y mesure la quantité de Y sacrifiée pour obtenir une unité supplémentaire de X à utilité constante.',
+    application:'Lorsque X devient plus abondant, le consommateur accepte de sacrifier de moins en moins de Y pour une nouvelle unité de X.',
+    trap:'La décroissance est étudiée en fonction de X, le bien qui augmente lors du déplacement vers la droite.'
+  },
+  {
+    number:14,theme:'tms',difficulty:'Facile',source:'Série N°2 — QCM Q10',
+    skill:'Calculer un TMS discret entre deux paniers équivalents.',
+    prompt:'Les paniers A (2 ; 16) et B (4 ; 8) procurent la même utilité. En passant de A à B, le TMSx/y est :',
+    options:[
+      '4.',
+      '−4.',
+      '1/4.',
+      '−1/4.'
+    ],
+    answer:0,
+    rule:'Le TMS est la valeur absolue de la pente entre deux paniers équivalents : TMS = |ΔY/ΔX|.',
+    application:'ΔX = 4 − 2 = 2 et |ΔY| = |8 − 16| = 8. Donc TMS = 8/2 = 4.',
+    trap:'La pente géométrique est négative, mais le TMS demandé par la source est sa valeur absolue.'
+  },
+  {
+    number:15,theme:'tms',difficulty:'Moyen',source:'Série N°2 — QCM Q14',
+    skill:'Relier l’abondance des biens à leurs utilités marginales.',
+    prompt:'En se déplaçant sur une courbe d’indifférence du haut vers le bas, donc vers la droite :',
+    options:[
+      'UmX et UmY augmentent.',
+      'UmX et UmY diminuent.',
+      'UmX diminue et UmY augmente.',
+      'UmX augmente et UmY diminue.'
+    ],
+    answer:2,
+    rule:'L’utilité marginale d’un bien diminue lorsqu’il devient plus abondant et augmente lorsqu’il devient plus rare.',
+    application:'Vers la droite, X augmente donc UmX diminue ; Y diminue donc UmY augmente.',
+    trap:'Le niveau d’utilité totale reste constant sur la CI, mais les utilités marginales des deux biens évoluent en sens opposés.'
+  },
+  {
+    number:16,theme:'tms',difficulty:'Moyen',source:'Devoir de contrôle 2023/2024 — QCM Q1',
+    skill:'Appliquer un TMS donné à un déplacement de plusieurs unités.',
+    prompt:'Pour passer de H (4 ; 6) à G (6 ; Y) sur une même CI, le consommateur sacrifie 2 unités de Y pour chaque unité supplémentaire de X. Le panier G est :',
+    options:[
+      '(6 ; 2).',
+      '(6 ; 4).',
+      '(6 ; 8).',
+      '(6 ; 10).'
+    ],
+    answer:0,
+    rule:'Le sacrifice total est égal au TMS multiplié par le nombre d’unités supplémentaires de X.',
+    application:'X augmente de 6 − 4 = 2 unités. Le sacrifice de Y vaut 2 × 2 = 4. Ainsi Y = 6 − 4 = 2.',
+    trap:'Le nombre 2 représente ici un sacrifice par unité de X, et non le sacrifice total.'
+  },
+  {
+    number:17,theme:'tms',difficulty:'Difficile',source:'Devoir de synthèse 2024/2025 — QCM Item 4',
+    skill:'Maintenir l’utilité avec une fonction U proportionnelle à √(XY).',
+    prompt:'Un consommateur a U(X,Y) = √5 × X^(1/2) × Y^(1/2) et consomme A (10 ; 8). Il veut 6 unités supplémentaires de X en gardant la même satisfaction. Il doit renoncer à :',
+    options:[
+      '6 unités de Y.',
+      '5 unités de Y.',
+      '4 unités de Y.',
+      '3 unités de Y.'
+    ],
+    answer:3,
+    rule:'Pour cette fonction, garder la même utilité revient à garder le produit X × Y constant.',
+    application:'Au départ, X × Y = 10 × 8 = 80. Après la hausse, X = 16, donc 16Y = 80 et Y = 5. Le sacrifice est 8 − 5 = 3.',
+    trap:'Il ne faut pas appliquer directement le nombre 6 à Y : la compensation dépend de la courbe d’indifférence.'
+  },
+  {
+    number:18,theme:'tms',difficulty:'Très difficile',source:'Série N°2 — QCM Q12',
+    skill:'Maintenir une utilité Cobb-Douglas après une forte variation de X.',
+    prompt:'Soit U(X,Y) = X^(1/3) × Y^(2/3) et le panier A (8 ; 27). Si X augmente de 10 unités à utilité constante, le consommateur doit sacrifier :',
+    options:[
+      '10 unités de Y.',
+      '18 unités de Y.',
+      '0,9 unité de Y.',
+      '9 unités de Y.'
+    ],
+    answer:3,
+    rule:'À utilité constante, on égalise l’utilité du nouveau panier à celle du panier initial.',
+    application:'U(A) = 8^(1/3) × 27^(2/3) = 2 × 9 = 18. Avec X = 18 : 18^(1/3) × Y^(2/3) = 18. En élevant au cube, 18Y² = 18³, donc Y = 18. Le sacrifice est 27 − 18 = 9.',
+    trap:'La valeur 0,9 correspondrait au sacrifice moyen par unité de X, tandis que la question demande le sacrifice total de Y.'
+  },
+
+  {
+    number:19,theme:'budget',difficulty:'Facile',source:'Série N°3 — QCM Q1 — énoncé rendu plus précis',
+    skill:'Identifier la propriété propre aux paniers situés sur la droite budgétaire.',
+    prompt:'Quelle propriété distingue un panier situé sur la droite budgétaire d’un panier situé au-dessous de cette droite ?',
+    options:[
+      'Ses dépenses dépassent le budget.',
+      'Le budget dépasse ses dépenses.',
+      'Le consommateur est capable de l’acheter.',
+      'Ses dépenses épuisent exactement le budget.'
+    ],
+    answer:3,
+    rule:'La droite budgétaire représente les paniers pour lesquels la dépense totale est exactement égale au budget.',
+    application:'Un panier situé au-dessous est aussi accessible, mais il n’utilise pas tout le budget. L’égalité dépenses = budget caractérise donc la droite elle-même.',
+    trap:'« Accessible » n’est pas assez précis, car les paniers situés au-dessous de la droite sont également accessibles.'
+  },
+  {
+    number:20,theme:'budget',difficulty:'Facile',source:'Série N°3 — QCM Q2',
+    skill:'Caractériser un panier situé au-dessous de la droite budgétaire.',
+    prompt:'Un panier situé au-dessous de la droite budgétaire est :',
+    options:[
+      'Inaccessible au consommateur.',
+      'Accessible et nécessairement optimal.',
+      'Accessible mais non optimal dans le cadre retenu par la source.',
+      'Un panier qui ne respecte pas la contrainte budgétaire.'
+    ],
+    answer:2,
+    rule:'Au-dessous de la droite, les dépenses sont inférieures au budget : le panier appartient à la zone des possibilités de consommation.',
+    application:'Le panier est accessible, mais le consommateur pourrait encore utiliser le budget restant pour atteindre davantage de satisfaction.',
+    trap:'L’accessibilité ne signifie pas automatiquement l’optimalité.'
+  },
+  {
+    number:21,theme:'budget',difficulty:'Moyen',source:'Série N°3 — QCM Q6',
+    skill:'Construire une droite budgétaire à partir de Ymax et du sacrifice de Y.',
+    prompt:'Le consommateur peut acheter au maximum 10 unités de Y. Pour obtenir 1 unité supplémentaire de X, il doit renoncer à 2 unités de Y. Sa droite budgétaire est :',
+    options:[
+      'Y = 2X + 10 et Xmax = 5.',
+      'Y = 2X + 10 et Xmax = 20.',
+      'Y = −2X + 10 et Xmax = 5.',
+      'Y = −2X + 10 et Xmax = 20.'
+    ],
+    answer:2,
+    rule:'La droite s’écrit Y = pente × X + Ymax. Le sacrifice de Y donne une pente négative.',
+    application:'Ymax = 10 et la pente vaut −2, donc Y = −2X + 10. Pour Y = 0, Xmax = 10/2 = 5.',
+    trap:'Le sacrifice implique une pente négative : une pente positive ne respecterait pas la contrainte budgétaire.'
+  },
+  {
+    number:22,theme:'budget',difficulty:'Moyen',source:'Série N°3 — QCM Q9',
+    skill:'Déterminer l’équation d’une droite budgétaire à partir de deux paniers.',
+    prompt:'Les paniers A (2 ; 4) et B (3 ; 1) épuisent exactement le même budget. L’équation de la droite budgétaire est :',
+    options:[
+      'Y = 3X + 10.',
+      'Y = −3X + 10.',
+      'Y = −3X + 20.',
+      'Y = −4X + 10.'
+    ],
+    answer:1,
+    rule:'La pente d’une droite passant par deux paniers est ΔY/ΔX, puis l’ordonnée à l’origine est déterminée avec l’un des paniers.',
+    application:'La pente vaut (1 − 4)/(3 − 2) = −3. Avec A : 4 = −3 × 2 + b, donc b = 10. Ainsi Y = −3X + 10.',
+    trap:'Après avoir calculé la pente, il faut encore déterminer correctement l’ordonnée à l’origine.'
+  },
+  {
+    number:23,theme:'budget',difficulty:'Difficile',source:'Série N°3 — QCM Q13',
+    skill:'Analyser l’effet d’une hausse du revenu sur les quantités maximales.',
+    prompt:'Initialement, Xmax = 4 et Ymax = 8. Si le revenu augmente de 25 % tandis que PX et PY restent constants, les nouveaux maxima sont :',
+    options:[
+      'Xmax = 5 et Ymax = 6,25.',
+      'Xmax = 3,2 et Ymax = 6,25.',
+      'Xmax = 3,2 et Ymax = 8.',
+      'Xmax = 5 et Ymax = 10.'
+    ],
+    answer:3,
+    rule:'À prix constants, Xmax = R/PX et Ymax = R/PY varient dans la même proportion que le revenu.',
+    application:'Une hausse de 25 % multiplie chaque maximum par 1,25 : 4 × 1,25 = 5 et 8 × 1,25 = 10.',
+    trap:'Une hausse du revenu déplace parallèlement toute la droite : les deux intercepts augmentent dans la même proportion.'
+  },
+  {
+    number:24,theme:'budget',difficulty:'Très difficile',source:'Série N°3 — QCM Q14',
+    skill:'Déduire la nouvelle droite budgétaire après une baisse de PY.',
+    prompt:'La droite initiale est Y = −4X + 40. Si PY est divisée par deux, avec R et PX constants, la nouvelle droite est :',
+    options:[
+      'Y = −2X + 40.',
+      'Y = −4X + 80.',
+      'Y = −8X + 80.',
+      'Y = −2X + 20.'
+    ],
+    answer:2,
+    rule:'Dans Y = −(PX/PY)X + R/PY, PY apparaît au dénominateur de la pente et de l’ordonnée à l’origine.',
+    application:'Diviser PY par 2 double |PX/PY| et double R/PY. La pente passe de −4 à −8 et Ymax de 40 à 80.',
+    trap:'Une variation de PY modifie à la fois la pente et l’ordonnée à l’origine, mais laisse Xmax inchangé.'
+  }
+];
+
+const QUIZ_ID='micro-qcm-24-v4-classement';
+// Backend Google Apps Script intégré — collecte centralisée et classement automatique.
+const RESULTS_ENDPOINT='https://script.google.com/macros/s/AKfycbxuZh0PC5nb9hF7D3Gx1BXJmyK36im4gnr_4APR4TuhldHahjakO9GEFcO3qfGcibkllw/exec';
+const LOCAL_RESULTS_KEY='neoschool-micro-qcm-ranking-v1';
+const RESULT_POLICY='best'; // « best » = meilleur résultat conservé par élève ; « first » = première tentative.
+
+const $=id=>document.getElementById(id);
+const screenIds=['homeScreen','quizScreen','summaryScreen','leaderboardScreen','correctionScreen'];
+let state=createState();
+let summaryFilter='all';
+let keyFilter='all';
+let errorsOnly=false;
+let toastTimer;
+let timerInterval=null;
+let leaderboardRequestId=0;
+
+function makeAttemptId(){
+  if(globalThis.crypto?.randomUUID) return crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}`;
+}
+function createState(mode=null){
+  return{
+    mode,
+    current:0,
+    answers:Array(QUESTIONS.length).fill(null),
+    validated:Array(QUESTIONS.length).fill(false),
+    name:'',className:'',startedAt:null,finishedAt:null,finished:false,
+    attemptId:null,remoteStartSent:false,remoteFinishSent:false,remoteRank:null
+  };
+}
+function hydrateState(saved){
+  const base=createState(saved?.mode||null);
+  const hydrated={...base,...saved};
+  hydrated.answers=Array.isArray(saved?.answers)&&saved.answers.length===QUESTIONS.length?saved.answers:base.answers;
+  hydrated.validated=Array.isArray(saved?.validated)&&saved.validated.length===QUESTIONS.length?saved.validated:base.validated;
+  hydrated.attemptId=hydrated.attemptId||makeAttemptId();
+  return hydrated;
+}
+function showScreen(id){
+  screenIds.forEach(screenId=>$(screenId).classList.toggle('active',screenId===id));
+  if(id==='quizScreen'&&state.startedAt&&!state.finished) startTimer(); else stopTimer();
+  window.scrollTo({top:0,behavior:'auto'});
+}
+function saveState(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(error){}
+  updateResume();
+}
+function loadState(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(saved&&Array.isArray(saved.answers)&&saved.answers.length===QUESTIONS.length) return hydrateState(saved);
+  }catch(error){}
+  return null;
+}
+function clearState(){
+  try{localStorage.removeItem(STORAGE_KEY);}catch(error){}
+  updateResume();
+}
+function formatMath(text){
+  const div=document.createElement('div');
+  div.textContent=text;
+  let out=div.innerHTML;
+  out=out.replace(/\^\(([^)]+)\)/g,'<sup>$1</sup>');
+  out=out.replace(/\b(UT|Um)(\d+)\b/g,'$1<sub>$2</sub>');
+  out=out.replace(/\bTMS x\/y\b/g,'TMS<sub>x/y</sub>');
+  out=out.replace(/\b(Xmax|Ymax)\b/g,m=>m[0]+'<sub>max</sub>');
+  return out;
+}
+function elapsedSeconds(){
+  if(!state.startedAt) return 0;
+  const end=state.finishedAt||Date.now();
+  return Math.max(0,Math.floor((end-state.startedAt)/1000));
+}
+function formatDuration(totalSeconds){
+  const seconds=Math.max(0,Number(totalSeconds)||0);
+  const h=Math.floor(seconds/3600);
+  const m=Math.floor((seconds%3600)/60);
+  const s=Math.floor(seconds%60);
+  return h>0?`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function updateTimer(){
+  const timer=$('timerDisplay');
+  if(!timer) return;
+  timer.textContent=formatDuration(elapsedSeconds());
+  timer.classList.toggle('finished',Boolean(state.finished));
+}
+function startTimer(){
+  stopTimer();
+  updateTimer();
+  timerInterval=setInterval(updateTimer,1000);
+}
+function stopTimer(){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+  updateTimer();
+}
+function endpointConfigured(){
+  return /^https:\/\/script\.google\.com\/macros\/s\//.test(RESULTS_ENDPOINT)&&/\/exec(?:\?|$)/.test(RESULTS_ENDPOINT);
+}
+function normalizeText(value){
+  return String(value||'').trim().toLocaleLowerCase('fr-FR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
+}
+function startQuiz(mode){
+  const name=$('studentName').value.trim();
+  const className=$('studentClass').value.trim();
+  if(mode==='exam'&&(!name||!className)){
+    toast('Nom, prénom et classe sont obligatoires en mode évaluation.');
+    (!name?$('studentName'):$('studentClass')).focus();
+    return;
+  }
+  state=createState(mode);
+  state.name=name;
+  state.className=className;
+  state.startedAt=Date.now();
+  state.attemptId=makeAttemptId();
+  saveState();
+  showScreen('quizScreen');
+  renderQuestion();
+  if(mode==='exam') sendStartEvent();
+}
+function resumeQuiz(){
+  const saved=loadState();
+  if(!saved) return;
+  state=saved;
+  $('studentName').value=state.name||'';
+  $('studentClass').value=state.className||'';
+  if(state.finished) showSummary(false);
+  else{
+    showScreen('quizScreen');
+    renderQuestion();
+    if(state.mode==='exam'&&!state.remoteStartSent) sendStartEvent();
+  }
+}
+function renderQuestion(){
+  const q=QUESTIONS[state.current];
+  const selected=state.answers[state.current];
+  const validated=state.validated[state.current];
+  const theme=THEMES[q.theme];
+  $('themePill').textContent=theme.short;
+  $('themePill').title=theme.name;
+  $('levelPill').textContent=q.difficulty;
+  $('levelPill').className=`pill ${LEVEL_CLASS[q.difficulty]}`;
+  $('counter').textContent=`${q.number}/24`;
+  $('progressFill').style.width=`${q.number/QUESTIONS.length*100}%`;
+  $('sourceRef').textContent=q.source;
+  $('skillRef').textContent=q.skill;
+  $('questionText').innerHTML=formatMath(q.prompt);
+  const options=$('options');
+  options.innerHTML='';
+  q.options.forEach((option,index)=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='option';
+    button.setAttribute('role','radio');
+    button.setAttribute('aria-checked',selected===index?'true':'false');
+    button.innerHTML=`<span class="letter">${LETTERS[index]}</span><span class="option-copy">${formatMath(option)}</span>`;
+    if(selected===index) button.classList.add('selected');
+    if(validated){
+      button.disabled=true;
+      if(state.mode==='training'){
+        if(index===q.answer) button.classList.add('correct');
+        if(index===selected&&index!==q.answer) button.classList.add('wrong');
+      }
+    }
+    button.addEventListener('click',()=>chooseAnswer(index));
+    options.appendChild(button);
+  });
+  $('prevBtn').disabled=state.current===0;
+  $('validateBtn').disabled=selected===null||validated;
+  $('validateBtn').classList.toggle('hidden',validated);
+  $('nextBtn').classList.toggle('hidden',!validated);
+  $('nextBtn').textContent=state.current===QUESTIONS.length-1?'Voir le résultat →':'Question suivante →';
+  renderFeedback();
+  updateTimer();
+}
+function chooseAnswer(index){
+  if(state.validated[state.current]) return;
+  state.answers[state.current]=index;
+  saveState();
+  renderQuestion();
+}
+function validateAnswer(){
+  if(state.answers[state.current]===null||state.validated[state.current]) return;
+  state.validated[state.current]=true;
+  saveState();
+  renderQuestion();
+  setTimeout(()=>{$('feedback').scrollIntoView({behavior:'smooth',block:'nearest'});},30);
+}
+function explanationHTML(q){
+  return `<div class="explanation-grid">
+    <div class="explanation-row"><span class="explanation-label">Règle de cours</span>${formatMath(q.rule)}</div>
+    <div class="explanation-row"><span class="explanation-label">Application</span>${formatMath(q.application)}</div>
+    <div class="explanation-row"><span class="explanation-label">Piège à éviter</span>${formatMath(q.trap)}</div>
+  </div>`;
+}
+function renderFeedback(){
+  const q=QUESTIONS[state.current];
+  const selected=state.answers[state.current];
+  const validated=state.validated[state.current];
+  const box=$('feedback');
+  box.className='feedback';
+  box.innerHTML='';
+  if(!validated) return;
+  if(state.mode==='training'){
+    const correct=selected===q.answer;
+    box.classList.add('show',correct?'good':'bad');
+    box.innerHTML=`<strong>${correct?'Bonne réponse.':`Réponse incorrecte. La bonne réponse est ${LETTERS[q.answer]}.`}</strong>${explanationHTML(q)}`;
+  }else{
+    box.classList.add('show','neutral');
+    box.innerHTML='<strong>Réponse enregistrée.</strong> La correction détaillée sera affichée à la fin de l’évaluation.';
+  }
+}
+function nextQuestion(){
+  if(!state.validated[state.current]) return;
+  if(state.current===QUESTIONS.length-1){showSummary(true);return;}
+  state.current++;
+  saveState();
+  renderQuestion();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function previousQuestion(){
+  if(state.current===0) return;
+  state.current--;
+  saveState();
+  renderQuestion();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function score(){return QUESTIONS.reduce((total,q,index)=>total+(state.answers[index]===q.answer?1:0),0);}
+function buildResultRecord(){
+  return{
+    quizId:QUIZ_ID,
+    attemptId:state.attemptId||makeAttemptId(),
+    name:state.name||'Élève non renseigné',
+    className:state.className||'Non renseignée',
+    score:score(),
+    total:QUESTIONS.length,
+    durationSec:elapsedSeconds(),
+    startedAt:state.startedAt,
+    finishedAt:state.finishedAt||Date.now(),
+    mode:state.mode,
+    answers:[...state.answers]
+  };
+}
+function showSummary(markFinished=true){
+  const justFinished=markFinished&&!state.finished;
+  if(justFinished){
+    state.finished=true;
+    state.finishedAt=Date.now();
+  }
+  stopTimer();
+  saveState();
+  const result=buildResultRecord();
+  if(state.mode==='exam'){
+    saveLocalResult(result);
+    if(endpointConfigured()&&!state.remoteFinishSent) sendFinishEvent(result);
+  }
+  showScreen('summaryScreen');
+  renderSummary();
+  if(state.mode==='exam'&&endpointConfigured()) setTimeout(()=>loadLeaderboard({silent:true,className:state.className}),1200);
+}
+function masteryText(percent){
+  if(percent>=92) return 'Excellente maîtrise : les quatre thèmes sont solidement acquis.';
+  if(percent>=75) return 'Bonne maîtrise : quelques calculs ou justifications restent à consolider.';
+  if(percent>=58) return 'Maîtrise en cours : reprenez surtout les items difficiles et très difficiles.';
+  return 'Révision nécessaire : recommencez en mode entraînement et lisez chaque justification.';
+}
+function renderSummary(){
+  const result=score();
+  const percent=Math.round(result/QUESTIONS.length*100);
+  const duration=elapsedSeconds();
+  $('scoreValue').textContent=`${result}/24`;
+  $('scorePercent').textContent=`${percent} %`;
+  $('scoreBadge').textContent=`${percent}%`;
+  $('durationSummary').textContent=formatDuration(duration);
+  $('mastery').textContent=masteryText(percent);
+  $('summarySub').textContent=`${state.mode==='exam'?'Mode évaluation':'Mode entraînement'} · ${formatDuration(duration)} · ${result} bonne${result>1?'s':''} réponse${result>1?'s':''} sur 24.`;
+  $('studentSummary').textContent=`${state.name||'Élève non renseigné'}${state.className?' · '+state.className:''}`;
+  renderOwnRank();
+  renderSubmissionStatus();
+  const themeScores=$('themeScores');
+  themeScores.innerHTML='';
+  THEME_ORDER.forEach(themeId=>{
+    const indices=QUESTIONS.map((q,index)=>q.theme===themeId?index:-1).filter(index=>index>=0);
+    const themeResult=indices.reduce((total,index)=>total+(state.answers[index]===QUESTIONS[index].answer?1:0),0);
+    const row=document.createElement('div');
+    row.className='theme-score';
+    row.innerHTML=`<span>${THEMES[themeId].short} — ${THEMES[themeId].name}</span><b>${themeResult}/6</b>`;
+    themeScores.appendChild(row);
+  });
+  renderFilters('summaryFilters',summaryFilter,setSummaryFilter);
+  renderReview('summaryReview',summaryFilter,true,errorsOnly);
+  $('errorsBtn').textContent=errorsOnly?'Afficher toutes les réponses':'Afficher seulement les erreurs';
+}
+function renderOwnRank(){
+  const rankBox=$('rankSummary');
+  if(state.mode!=='exam'){
+    rankBox.textContent='Non classé';
+    return;
+  }
+  if(state.remoteRank){
+    rankBox.textContent=`#${state.remoteRank.rank}/${state.remoteRank.total}`;
+    return;
+  }
+  const ranking=getLocalRanking(state.className);
+  const own=ranking.find(item=>item.attemptId===state.attemptId);
+  rankBox.textContent=own?`#${own.rank}/${ranking.length}`:'En attente';
+}
+function renderSubmissionStatus(kind,message){
+  const box=$('submissionStatus');
+  box.className='submission-status';
+  if(kind) box.classList.add(kind);
+  if(message){box.textContent=message;return;}
+  if(state.mode!=='exam'){
+    box.textContent='Mode entraînement : le résultat n’est pas ajouté au classement.';
+  }else if(endpointConfigured()){
+    box.classList.add(state.remoteFinishSent?'success':'warning');
+    box.textContent=state.remoteFinishSent?'Résultat transmis au classement central. Le rang est actualisé automatiquement.':'Transmission du résultat au classement central…';
+  }else{
+    box.classList.add('warning');
+    box.textContent='Classement local actif sur cet appareil. Configurez le Web App Google Sheets pour regrouper automatiquement les résultats de tous les téléphones.';
+  }
+}
+function renderFilters(containerId,active,handler){
+  const container=$(containerId);
+  container.innerHTML='';
+  const filters=[{id:'all',label:'Tous'},...THEME_ORDER.map(id=>({id,label:THEMES[id].short}))];
+  filters.forEach(filter=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.className=`filter-btn${filter.id===active?' active':''}`;
+    button.textContent=filter.label;
+    button.addEventListener('click',()=>handler(filter.id));
+    container.appendChild(button);
+  });
+}
+function setSummaryFilter(id){
+  summaryFilter=id;
+  renderFilters('summaryFilters',summaryFilter,setSummaryFilter);
+  renderReview('summaryReview',summaryFilter,true,errorsOnly);
+}
+function setKeyFilter(id){
+  keyFilter=id;
+  renderFilters('keyFilters',keyFilter,setKeyFilter);
+  renderReview('keyReview',keyFilter,false,false);
+}
+function renderReview(containerId,filter,withStudent,onlyErrors){
+  const container=$(containerId);
+  container.innerHTML='';
+  QUESTIONS.forEach((q,index)=>{
+    if(filter!=='all'&&q.theme!==filter) return;
+    const selected=state.answers[index];
+    const correct=selected===q.answer;
+    if(onlyErrors&&correct) return;
+    const item=document.createElement('article');
+    item.className=`review-item${withStudent&&!correct?' bad':''}`;
+    const studentLine=withStudent?`<p class="review-answer"><strong>Votre réponse :</strong> ${selected===null?'Aucune réponse':LETTERS[selected]+'. '+formatMath(q.options[selected])}</p>`:'';
+    item.innerHTML=`
+      <h3>Item ${q.number}. ${formatMath(q.prompt)}</h3>
+      <div class="review-meta">${q.source} · ${THEMES[q.theme].short} · ${q.difficulty}</div>
+      <div class="review-skill">Objectif : ${formatMath(q.skill)}</div>
+      ${studentLine}
+      <p class="review-answer"><strong>Réponse correcte :</strong> ${LETTERS[q.answer]}. ${formatMath(q.options[q.answer])}</p>
+      <div class="justification">${explanationHTML(q)}</div>`;
+    container.appendChild(item);
+  });
+  if(!container.children.length) container.innerHTML='<div class="empty">Aucun item ne correspond à ce filtre.</div>';
+}
+function showAnswerKey(){
+  showScreen('correctionScreen');
+  keyFilter='all';
+  renderFilters('keyFilters',keyFilter,setKeyFilter);
+  renderReview('keyReview','all',false,false);
+}
+function goHome(){showScreen('homeScreen');updateResume();}
+function restartQuiz(){
+  const mode=state.mode||'training';
+  clearState();
+  startQuiz(mode);
+}
+function updateResume(){
+  const saved=loadState();
+  const box=$('resumeBox');
+  if(saved&&saved.startedAt){
+    const done=saved.validated.filter(Boolean).length;
+    const duration=Math.max(0,Math.floor(((saved.finishedAt||Date.now())-saved.startedAt)/1000));
+    $('resumeText').textContent=saved.finished?`Un résultat précédent est enregistré (${formatDuration(duration)}).`:`Progression enregistrée : ${done} item${done>1?'s':''} validé${done>1?'s':''} sur 24 · temps écoulé ${formatDuration(duration)}.`;
+    box.classList.add('show');
+  }else box.classList.remove('show');
+}
+function toast(message){
+  const element=$('toast');
+  element.textContent=message;
+  element.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>element.classList.remove('show'),1900);
+}
+function loadLocalResults(){
+  try{
+    const parsed=JSON.parse(localStorage.getItem(LOCAL_RESULTS_KEY));
+    return Array.isArray(parsed)?parsed:[];
+  }catch(error){return [];}
+}
+function saveLocalResult(result){
+  const results=loadLocalResults().filter(item=>item.attemptId!==result.attemptId);
+  results.push(result);
+  results.sort((a,b)=>(Number(b.finishedAt)||0)-(Number(a.finishedAt)||0));
+  try{localStorage.setItem(LOCAL_RESULTS_KEY,JSON.stringify(results.slice(0,500)));}catch(error){}
+}
+function resultComparator(a,b){
+  const scoreDiff=(Number(b.score)||0)-(Number(a.score)||0);
+  if(scoreDiff) return scoreDiff;
+  const durationDiff=(Number(a.durationSec)||0)-(Number(b.durationSec)||0);
+  if(durationDiff) return durationDiff;
+  return (Number(a.finishedAt)||0)-(Number(b.finishedAt)||0);
+}
+function deduplicateResults(results){
+  const groups=new Map();
+  results.forEach(result=>{
+    if(result.quizId!==QUIZ_ID||result.mode!=='exam') return;
+    const key=`${normalizeText(result.name)}|${normalizeText(result.className)}`;
+    const current=groups.get(key);
+    if(!current){groups.set(key,result);return;}
+    if(RESULT_POLICY==='first'){
+      if((Number(result.finishedAt)||0)<(Number(current.finishedAt)||0)) groups.set(key,result);
+    }else if(resultComparator(result,current)<0){
+      groups.set(key,result);
+    }
+  });
+  return [...groups.values()];
+}
+function rankResults(results){
+  const sorted=[...results].sort(resultComparator);
+  let previous=null;
+  return sorted.map((item,index)=>{
+    const same=previous&&Number(previous.score)===Number(item.score)&&Number(previous.durationSec)===Number(item.durationSec);
+    const rank=same?previous.rank:index+1;
+    const ranked={...item,rank};
+    previous=ranked;
+    return ranked;
+  });
+}
+function getLocalRanking(className=''){
+  const filter=normalizeText(className);
+  const results=deduplicateResults(loadLocalResults()).filter(item=>!filter||normalizeText(item.className)===filter);
+  return rankResults(results);
+}
+async function postNoCors(payload){
+  if(!endpointConfigured()) throw new Error('Endpoint non configuré');
+  const body=new URLSearchParams();
+  Object.entries(payload).forEach(([key,value])=>body.set(key,String(value??'')));
+  return fetch(RESULTS_ENDPOINT,{method:'POST',mode:'no-cors',cache:'no-store',body,keepalive:true});
+}
+async function sendStartEvent(){
+  if(!endpointConfigured()||state.mode!=='exam'||state.remoteStartSent) return;
+  try{
+    await postNoCors({action:'start',quizId:QUIZ_ID,attemptId:state.attemptId,name:state.name,className:state.className,clientStartedAt:state.startedAt});
+    state.remoteStartSent=true;
+    saveState();
+  }catch(error){
+    state.remoteStartSent=false;
+    saveState();
+  }
+}
+async function sendFinishEvent(result){
+  if(!endpointConfigured()||state.mode!=='exam'){
+    renderSubmissionStatus();
+    return;
+  }
+  renderSubmissionStatus('warning','Transmission du résultat au classement central…');
+  try{
+    await postNoCors({
+      action:'finish',quizId:QUIZ_ID,attemptId:result.attemptId,name:result.name,className:result.className,
+      answers:JSON.stringify(result.answers),clientDurationSec:result.durationSec,clientStartedAt:result.startedAt,clientFinishedAt:result.finishedAt
+    });
+    state.remoteFinishSent=true;
+    saveState();
+    renderSubmissionStatus('success','Résultat transmis au classement central. Le rang est actualisé automatiquement.');
+    setTimeout(()=>loadLeaderboard({silent:true,className:state.className}),900);
+  }catch(error){
+    state.remoteFinishSent=false;
+    saveState();
+    renderSubmissionStatus('error','Le résultat reste enregistré localement, mais l’envoi central a échoué. Vérifiez la connexion puis rouvrez le résultat.');
+  }
+}
+function jsonpRequest(params,timeoutMs=10000){
+  return new Promise((resolve,reject)=>{
+    if(!endpointConfigured()){reject(new Error('Endpoint non configuré'));return;}
+    const requestId=++leaderboardRequestId;
+    const callbackName=`__neoschoolRanking${Date.now()}_${requestId}`;
+    const script=document.createElement('script');
+    const timer=setTimeout(()=>cleanup(new Error('Délai dépassé')),timeoutMs);
+    function cleanup(error,data){
+      clearTimeout(timer);
+      script.remove();
+      try{delete window[callbackName];}catch(e){window[callbackName]=undefined;}
+      error?reject(error):resolve(data);
+    }
+    window[callbackName]=data=>cleanup(null,data);
+    script.onerror=()=>cleanup(new Error('Chargement impossible'));
+    const url=new URL(RESULTS_ENDPOINT);
+    Object.entries({...params,prefix:callbackName}).forEach(([key,value])=>url.searchParams.set(key,String(value??'')));
+    script.src=url.toString();
+    document.body.appendChild(script);
+  });
+}
+function showLeaderboard(){
+  showScreen('leaderboardScreen');
+  if(!$('leaderboardClass').value) $('leaderboardClass').value=state.className||$('studentClass').value.trim();
+  loadLeaderboard();
+}
+async function loadLeaderboard({silent=false,className=null}={}){
+  const classFilter=className!==null?className:$('leaderboardClass').value.trim();
+  if(!silent){
+    $('leaderboardList').innerHTML='<div class="empty">Chargement du classement…</div>';
+    $('leaderboardSource').innerHTML='<strong>Règle :</strong> score décroissant, puis durée croissante à score égal.';
+  }
+  if(endpointConfigured()){
+    try{
+      const data=await jsonpRequest({action:'leaderboard',quizId:QUIZ_ID,className:classFilter,limit:200});
+      if(!data?.ok||!Array.isArray(data.results)) throw new Error(data?.error||'Réponse invalide');
+      renderLeaderboardData(data.results,'central',classFilter);
+      const own=data.results.find(item=>item.attemptId===state.attemptId);
+      if(own){
+        state.remoteRank={rank:own.rank,total:data.results.length};
+        saveState();
+        if($('summaryScreen').classList.contains('active')) renderOwnRank();
+      }
+      return;
+    }catch(error){
+      if(!silent) toast('Classement central indisponible : affichage local.');
+    }
+  }
+  renderLeaderboardData(getLocalRanking(classFilter),'local',classFilter);
+}
+function renderLeaderboardData(results,source,classFilter){
+  const ranked=results.map((item,index)=>({...item,rank:Number(item.rank)||index+1}));
+  const sourceBox=$('leaderboardSource');
+  sourceBox.innerHTML=source==='central'
+    ?`<strong>Classement central :</strong> ${ranked.length} élève${ranked.length>1?'s':''}${classFilter?' · classe '+escapeText(classFilter):''}. Les données proviennent automatiquement de Google Sheets.`
+    :`<strong>Classement local :</strong> ${ranked.length} élève${ranked.length>1?'s':''}${classFilter?' · classe '+escapeText(classFilter):''}. Seuls les résultats enregistrés sur cet appareil sont visibles.`;
+  $('endpointAlert').classList.toggle('hidden',source==='central');
+  if(source!=='central') $('endpointAlert').textContent=endpointConfigured()
+    ? 'Le backend est intégré, mais le classement central est momentanément indisponible. Vérifiez la connexion Internet et l’accès public du déploiement Apps Script.'
+    : 'Pour classer automatiquement les élèves utilisant différents téléphones, configurez une URL Google Apps Script /exec dans le fichier HTML.';
+  const list=$('leaderboardList');
+  list.innerHTML='';
+  if(!ranked.length){list.innerHTML='<div class="empty">Aucun résultat classé pour ce filtre.</div>';return;}
+  ranked.forEach(item=>{
+    const row=document.createElement('article');
+    row.className=`leaderboard-row${item.attemptId===state.attemptId?' current':''}`;
+    const rank=document.createElement('div');
+    rank.className='leaderboard-rank';
+    rank.textContent=`#${item.rank}`;
+    const student=document.createElement('div');
+    student.className='leaderboard-student';
+    const name=document.createElement('b');
+    name.textContent=item.displayName||item.name||'Élève';
+    const cls=document.createElement('small');
+    cls.textContent=item.className||'Classe non renseignée';
+    student.append(name,cls);
+    const result=document.createElement('div');
+    result.className='leaderboard-result';
+    const scoreNode=document.createElement('b');
+    scoreNode.textContent=`${item.score}/${item.total||24}`;
+    const time=document.createElement('time');
+    time.textContent=formatDuration(item.durationSec);
+    result.append(scoreNode,time);
+    row.append(rank,student,result);
+    list.appendChild(row);
+  });
+}
+function escapeText(value){
+  const div=document.createElement('div');
+  div.textContent=String(value||'');
+  return div.innerHTML;
+}
+
+$('trainingBtn').addEventListener('click',()=>startQuiz('training'));
+$('examBtn').addEventListener('click',()=>startQuiz('exam'));
+$('answerKeyBtn').addEventListener('click',showAnswerKey);
+$('leaderboardBtn').addEventListener('click',showLeaderboard);
+$('leaderboardFromSummaryBtn').addEventListener('click',showLeaderboard);
+$('refreshLeaderboardBtn').addEventListener('click',()=>loadLeaderboard());
+$('leaderboardClass').addEventListener('keydown',event=>{if(event.key==='Enter') loadLeaderboard();});
+$('resumeBtn').addEventListener('click',resumeQuiz);
+$('homeBtn').addEventListener('click',goHome);
+$('prevBtn').addEventListener('click',previousQuestion);
+$('validateBtn').addEventListener('click',validateAnswer);
+$('nextBtn').addEventListener('click',nextQuestion);
+$('restartBtn').addEventListener('click',restartQuiz);
+$('errorsBtn').addEventListener('click',()=>{errorsOnly=!errorsOnly;renderSummary();});
+$('startFromKeyBtn').addEventListener('click',()=>startQuiz('training'));
+
+document.addEventListener('keydown',event=>{
+  if(!$('quizScreen').classList.contains('active')) return;
+  if(['1','2','3','4'].includes(event.key)&&!state.validated[state.current]) chooseAnswer(Number(event.key)-1);
+  if(event.key==='Enter'){
+    event.preventDefault();
+    state.validated[state.current]?nextQuestion():validateAnswer();
+  }
+  if(event.key==='ArrowLeft') previousQuestion();
+  if(event.key==='ArrowRight'&&state.validated[state.current]) nextQuestion();
+});
+
+document.addEventListener('visibilitychange',()=>{if(!document.hidden) updateTimer();});
+updateResume();
+updateTimer();
+
+</script>
+</body>
+</html>
