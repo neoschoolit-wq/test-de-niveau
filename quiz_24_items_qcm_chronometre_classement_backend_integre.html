@@ -472,6 +472,7 @@ sup{font-size:.72em;line-height:0}sub{font-size:.72em;line-height:0}
         <div id="themeScores" class="theme-scores"></div>
         <div class="stack-actions">
           <button id="restartBtn" class="btn btn-primary" type="button">Recommencer</button>
+          <button id="retrySubmissionBtn" class="btn btn-ghost hidden" type="button">Réessayer l’envoi</button>
           <button id="errorsBtn" class="btn btn-ghost" type="button">Afficher les erreurs</button>
           <button id="leaderboardFromSummaryBtn" class="btn btn-dark" type="button">Voir le classement</button>
         </div>
@@ -511,7 +512,7 @@ sup{font-size:.72em;line-height:0}sub{font-size:.72em;line-height:0}
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
-const STORAGE_KEY='neoschool-micro-qcm-source-mobile-v4-timed-ranking';
+const STORAGE_KEY='neoschool-micro-qcm-source-mobile-v5-verified-ranking';
 const LETTERS=['A','B','C','D'];
 const THEME_ORDER=['utility','indifference','tms','budget'];
 const THEMES={
@@ -896,7 +897,8 @@ const QUESTIONS=[
 const QUIZ_ID='micro-qcm-24-v4-classement';
 // Backend Google Apps Script intégré — collecte centralisée et classement automatique.
 const RESULTS_ENDPOINT='https://script.google.com/macros/s/AKfycbxuZh0PC5nb9hF7D3Gx1BXJmyK36im4gnr_4APR4TuhldHahjakO9GEFcO3qfGcibkllw/exec';
-const LOCAL_RESULTS_KEY='neoschool-micro-qcm-ranking-v1';
+const LOCAL_RESULTS_KEY='neoschool-micro-qcm-ranking-v2';
+const REQUIRED_BACKEND_MAJOR=2;
 const RESULT_POLICY='best'; // « best » = meilleur résultat conservé par élève ; « first » = première tentative.
 
 const $=id=>document.getElementById(id);
@@ -908,6 +910,8 @@ let errorsOnly=false;
 let toastTimer;
 let timerInterval=null;
 let leaderboardRequestId=0;
+let startSubmissionInFlight=false;
+let finishSubmissionInFlight=false;
 
 function makeAttemptId(){
   if(globalThis.crypto?.randomUUID) return crypto.randomUUID();
@@ -920,7 +924,8 @@ function createState(mode=null){
     answers:Array(QUESTIONS.length).fill(null),
     validated:Array(QUESTIONS.length).fill(false),
     name:'',className:'',startedAt:null,finishedAt:null,finished:false,
-    attemptId:null,remoteStartSent:false,remoteFinishSent:false,remoteRank:null
+    attemptId:null,remoteStartSent:false,remoteFinishSent:false,
+    remoteStartStatus:null,remoteFinishStatus:null,remoteFinishError:'',remoteRank:null
   };
 }
 function hydrateState(saved){
@@ -1199,19 +1204,43 @@ function renderOwnRank(){
   const own=ranking.find(item=>item.attemptId===state.attemptId);
   rankBox.textContent=own?`#${own.rank}/${ranking.length}`:'En attente';
 }
+function submissionReasonLabel(reason){
+  if(reason==='previous_result_is_better') return 'Le serveur a reçu cette tentative, mais votre meilleur résultat précédent reste classé.';
+  if(reason==='first_attempt_already_recorded') return 'Le serveur a reçu cette tentative, mais seule la première tentative est classée.';
+  return 'La tentative a été traitée par Google Sheets, mais elle n’a pas été ajoutée au classement.';
+}
 function renderSubmissionStatus(kind,message){
   const box=$('submissionStatus');
+  const retry=$('retrySubmissionBtn');
   box.className='submission-status';
+  retry.classList.add('hidden');
   if(kind) box.classList.add(kind);
-  if(message){box.textContent=message;return;}
+  if(message){
+    box.textContent=message;
+    if(kind==='error') retry.classList.remove('hidden');
+    return;
+  }
   if(state.mode!=='exam'){
     box.textContent='Mode entraînement : le résultat n’est pas ajouté au classement.';
-  }else if(endpointConfigured()){
-    box.classList.add(state.remoteFinishSent?'success':'warning');
-    box.textContent=state.remoteFinishSent?'Résultat transmis au classement central. Le rang est actualisé automatiquement.':'Transmission du résultat au classement central…';
+  }else if(!endpointConfigured()){
+    box.classList.add('warning');
+    box.textContent='Classement local actif sur cet appareil. Le Web App Google Sheets n’est pas configuré.';
+  }else if(state.remoteFinishSent){
+    const status=state.remoteFinishStatus||{};
+    if(status.accepted===false){
+      box.classList.add('warning');
+      box.textContent=submissionReasonLabel(status.reason);
+    }else{
+      box.classList.add('success');
+      box.textContent='Enregistrement confirmé dans Google Sheets. Le classement a été actualisé.';
+    }
+  }else if(state.remoteFinishError){
+    box.classList.add('error');
+    box.textContent=state.remoteFinishError;
+    retry.classList.remove('hidden');
   }else{
     box.classList.add('warning');
-    box.textContent='Classement local actif sur cet appareil. Configurez le Web App Google Sheets pour regrouper automatiquement les résultats de tous les téléphones.';
+    box.textContent='Envoi en cours. La confirmation Google Sheets est en attente…';
   }
 }
 function renderFilters(containerId,active,handler){
@@ -1342,39 +1371,95 @@ async function postNoCors(payload){
   if(!endpointConfigured()) throw new Error('Endpoint non configuré');
   const body=new URLSearchParams();
   Object.entries(payload).forEach(([key,value])=>body.set(key,String(value??'')));
+  // Apps Script does not expose a readable cross-origin POST response here.
+  // The request is therefore followed by a separate JSONP status check.
   return fetch(RESULTS_ENDPOINT,{method:'POST',mode:'no-cors',cache:'no-store',body,keepalive:true});
 }
-async function sendStartEvent(){
-  if(!endpointConfigured()||state.mode!=='exam'||state.remoteStartSent) return;
+function wait(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+function backendVersionIsCompatible(data){
+  const major=Number(String(data?.backendVersion||'0').split('.')[0]);
+  return major>=REQUIRED_BACKEND_MAJOR;
+}
+async function getAttemptStatus(attemptId){
+  const data=await jsonpRequest({action:'status',quizId:QUIZ_ID,attemptId},8000);
+  if(!data?.ok) throw new Error(data?.error||'Réponse de vérification invalide.');
+  if(!backendVersionIsCompatible(data)) throw new Error('Le backend Google Sheets doit être mis à jour vers la version 2.');
+  return data;
+}
+async function confirmAttemptPhase(attemptId,expectedPhase,timeoutMs=18000){
+  const deadline=Date.now()+timeoutMs;
+  let lastError=null;
+  while(Date.now()<deadline){
+    try{
+      const status=await getAttemptStatus(attemptId);
+      if(expectedPhase==='started'&&(status.phase==='started'||status.phase==='finished')) return status;
+      if(expectedPhase==='finished'&&status.phase==='finished') return status;
+    }catch(error){lastError=error;}
+    await wait(700);
+  }
+  throw lastError||new Error('Aucune confirmation reçue de Google Sheets.');
+}
+async function sendStartEvent({silent=false}={}){
+  if(!endpointConfigured()||state.mode!=='exam'||state.remoteStartSent||startSubmissionInFlight) return state.remoteStartSent;
+  startSubmissionInFlight=true;
   try{
     await postNoCors({action:'start',quizId:QUIZ_ID,attemptId:state.attemptId,name:state.name,className:state.className,clientStartedAt:state.startedAt});
+    const status=await confirmAttemptPhase(state.attemptId,'started',15000);
     state.remoteStartSent=true;
+    state.remoteStartStatus=status;
     saveState();
+    return true;
   }catch(error){
     state.remoteStartSent=false;
+    state.remoteStartStatus=null;
     saveState();
+    if(!silent) toast('Départ non confirmé par Google Sheets. Le résultat sera conservé localement jusqu’à un nouvel essai.');
+    return false;
+  }finally{
+    startSubmissionInFlight=false;
   }
 }
 async function sendFinishEvent(result){
   if(!endpointConfigured()||state.mode!=='exam'){
     renderSubmissionStatus();
-    return;
+    return false;
   }
-  renderSubmissionStatus('warning','Transmission du résultat au classement central…');
+  if(finishSubmissionInFlight) return false;
+  finishSubmissionInFlight=true;
+  state.remoteFinishError='';
+  renderSubmissionStatus('warning','Envoi du résultat et vérification dans Google Sheets…');
   try{
+    if(!state.remoteStartSent) await sendStartEvent({silent:true});
     await postNoCors({
       action:'finish',quizId:QUIZ_ID,attemptId:result.attemptId,name:result.name,className:result.className,
       answers:JSON.stringify(result.answers),clientDurationSec:result.durationSec,clientStartedAt:result.startedAt,clientFinishedAt:result.finishedAt
     });
+    const status=await confirmAttemptPhase(result.attemptId,'finished',22000);
     state.remoteFinishSent=true;
+    state.remoteFinishStatus=status;
+    state.remoteFinishError='';
     saveState();
-    renderSubmissionStatus('success','Résultat transmis au classement central. Le rang est actualisé automatiquement.');
-    setTimeout(()=>loadLeaderboard({silent:true,className:state.className}),900);
+    renderSubmissionStatus();
+    setTimeout(()=>loadLeaderboard({silent:true,className:state.className}),600);
+    return true;
   }catch(error){
     state.remoteFinishSent=false;
+    state.remoteFinishStatus=null;
+    state.remoteFinishError=`Enregistrement non confirmé : ${error?.message||'vérifiez le déploiement et la connexion Internet.'}`;
     saveState();
-    renderSubmissionStatus('error','Le résultat reste enregistré localement, mais l’envoi central a échoué. Vérifiez la connexion puis rouvrez le résultat.');
+    renderSubmissionStatus();
+    return false;
+  }finally{
+    finishSubmissionInFlight=false;
   }
+}
+function retrySubmission(){
+  if(state.mode!=='exam'||!state.finished) return;
+  state.remoteFinishSent=false;
+  state.remoteFinishStatus=null;
+  state.remoteFinishError='';
+  saveState();
+  sendFinishEvent(buildResultRecord());
 }
 function jsonpRequest(params,timeoutMs=10000){
   return new Promise((resolve,reject)=>{
@@ -1482,6 +1567,7 @@ $('prevBtn').addEventListener('click',previousQuestion);
 $('validateBtn').addEventListener('click',validateAnswer);
 $('nextBtn').addEventListener('click',nextQuestion);
 $('restartBtn').addEventListener('click',restartQuiz);
+$('retrySubmissionBtn').addEventListener('click',retrySubmission);
 $('errorsBtn').addEventListener('click',()=>{errorsOnly=!errorsOnly;renderSummary();});
 $('startFromKeyBtn').addEventListener('click',()=>startQuiz('training'));
 
